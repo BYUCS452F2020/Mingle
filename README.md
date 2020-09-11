@@ -2,6 +2,8 @@
 
 Find friends and events near you!
 
+<img src="/Images/Mingler.png" width="250" /> <img src="/Images/minglerevent.png" width="260" />
+
 ## Project description
 Have you ever moved somewhere new and wanted to meet friends? Or maybe you’re looking for something fun to do on Saturday night and all your roommates are out of town. Introducing Mingle! An app we want to develop that will let you see profiles of people nearby who are also looking for someone to hang-out with. You can specify when you’re free, what you like to do, and basic information about yourself. Think of this as Mutual or Tinder but instead of looking for that significant other, you’re just looking for a friend or a party. 
 
@@ -34,6 +36,6 @@ Event table
 Create fake data 
 UI development (do it in Flutter) 
 
-<img src="/Images/Mingler.png" width="250" /> <img src="/Images/minglerevent.png" width="260" />
+
 
 
