@@ -34,4 +34,4 @@ Event table
 Create fake data 
 UI development (do it in Flutter) 
 
-![GitHub Logo](/images/mingler.png)
+![Sample Profile](/Images/Mingler.png)
