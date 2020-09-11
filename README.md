@@ -35,5 +35,6 @@ Create fake data
 UI development (do it in Flutter) 
 
 <img src="/Images/Mingler.png" width="250" />
+<img src="/Images/'Mingler event-02.png'" width="250" />
 
 
