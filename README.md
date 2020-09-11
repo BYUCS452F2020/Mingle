@@ -19,9 +19,9 @@ This could be really cool to grow as a business, but for the purposes of the cla
 
 ## Legal
 There will definitely be some legal considerations here:
-Ensuring privacy of the individuals and the data they can share
-Having a release (terms of use) that waives liability in case there are fraudulent users and to ensure eligibility (over 18) 
-Profile reporting system
+1. Ensuring privacy of the individuals and the data they can share
+2. Having a release (terms of use) that waives liability in case there are fraudulent users and to ensure eligibility (over 18) 
+3. Profile reporting system
 
 ## Technical
 Our priorities will be:
