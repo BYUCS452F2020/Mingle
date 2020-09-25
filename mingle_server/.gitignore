@@ -1,3 +1,7 @@
+# Folders
 .idea
 test
 node_modules
+
+# Files
+config.json
