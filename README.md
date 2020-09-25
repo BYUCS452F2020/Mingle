@@ -8,7 +8,7 @@ Find friends and events near you!
 Have you ever moved somewhere new and wanted to meet friends? Or maybe you’re looking for something fun to do on Saturday night and all your roommates are out of town. Introducing Mingle! An app we want to develop that will let you see profiles of people nearby who are also looking for someone to hang-out with. You can specify when you’re free, what you like to do, and basic information about yourself. Think of this as Mutual or Tinder but instead of looking for that significant other, you’re just looking for a friend or a party. 
 
 ## Team
-We have a team of 2 already: Elizabeth Anderson and Ryan Leach. We’re potentially looking for another person to join.
+We are a fantastic team of 3: Elizabeth Anderson, Ryan Leach, and Tristan Henderson
 
 ## SQL
 MySQL (or PostgreSQL) 
