@@ -1,0 +1,27 @@
+{
+  "name": "mingle_server",
+  "version": "1.0.0",
+  "description": "Backend for Mingle Application",
+  "main": "source/main.js",
+  "scripts": {
+    "test": "nodemon source/main.js",
+    "start": "node source/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BYUCS452F2020/Mingle.git"
+  },
+  "author": "Tristan Henderson, Elizabeth Anderson, Ryan Leach",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BYUCS452F2020/Mingle/issues"
+  },
+  "homepage": "https://github.com/BYUCS452F2020/Mingle#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
