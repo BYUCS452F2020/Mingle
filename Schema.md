@@ -1,16 +1,16 @@
 # Schema
-The Events table contains the public events that have been created by other users of the app.   
-**Events** (event_id, user_id, location, date, time, event_description, other_information, verified_event). 
-	Foreign Key user_id references Users. 
-event_id : (int) the unique id of an event. 
-user_id : (int) the unique id of a user. 
-location : (String) the exact place the event will occur. 
-latitude: (float) latitude of the user’s current location. 
-longitude: (float) longitude of the user’s current location. 
-date_time: (DateTime) the day the event will occur. 
-event_description: (String) other relevant information about the event the planner wishes to add. 
-other_information: (String) other relevant information the planner wishes to add. 
-verified_event: (bool) has this event been verified?   
+The Events table contains the public events that have been created by other users of the app.     
+**Events** (event_id, user_id, location, date, time, event_description, other_information, verified_event).    
+	Foreign Key user_id references Users.    
+event_id : (int) the unique id of an event.   
+user_id : (int) the unique id of a user.   
+location : (String) the exact place the event will occur.   
+latitude: (float) latitude of the user’s current location.   
+longitude: (float) longitude of the user’s current location.   
+date_time: (DateTime) the day the event will occur.   
+event_description: (String) other relevant information about the event the planner wishes to add.   
+other_information: (String) other relevant information the planner wishes to add.   
+verified_event: (bool) has this event been verified?     
 
 The Friends table contains profile information that can be displayed in the application which is linked to a User account.  
 **Friends** (user_id, first_name, age, hometown, state, country, about_me, profile_picture, verified_profile). 
