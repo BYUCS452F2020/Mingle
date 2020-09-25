@@ -59,7 +59,7 @@ event_id: (int) ID of the matched event
 
 *Underlined fields represent primary keys, multiple underlined fields in a schema represent a composite key.
 
-##How the Tables Relate:
+## How the Tables Relate:
 Our table's main function is to help separate the information of each user of the Mingle app into sections of security, simplicity, and convenience.
 
 Events: This table contains all of the Events that have been uploaded to the Mingle server for other users to express their interest or disinterest. The primary key, event_id, will be added to a related user’s user_id in the Matching_Events table.
