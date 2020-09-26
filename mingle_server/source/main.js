@@ -23,7 +23,7 @@ app.post('/login', (request, response) => {
     console.log(`Password: ${request.body.password}`);
 
     // Fake hardcoded credentials for testing.
-    if (request.body.username == "test" && request.body.password == "password") {
+    if (request.body.username === "test" && request.body.password === "password") {
         // Login success.
         response.sendStatus(200);
     } else {
@@ -33,4 +33,4 @@ app.post('/login', (request, response) => {
 });
 
 logger.info(`Listening on port ${configuration.server.port}`);
-app.listen(configuration.port);
+app.listen(configuration.server.port);
