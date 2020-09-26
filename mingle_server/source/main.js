@@ -4,8 +4,14 @@ let bodyparser = require('body-parser');
 let log = require('./log');
 let database = require('./database');
 
-// JSON file containing configuration parameters that could differ by environment
-let configuration = require('../config.json');
+let configuration;
+try {
+    // JSON file containing configuration parameters that could differ by environment
+    configuration = require('../config.json');
+} catch (exception) {
+    console.log("Failed to find a configuration file, see readme for details in creating a config file.");
+    process.exit();
+}
 
 // If no port specified in configuration file, set to default.
 configuration.server.port = configuration.server.port || 4000;
@@ -36,8 +42,7 @@ app.post('/register', (request, response) => {
             // Conflict
             response.sendStatus(409);
         }
-    }
-    else {
+    } else {
         // Bad request
         response.sendStatus(400);
     }
@@ -60,8 +65,7 @@ app.post('/login', (request, response) => {
             // Login failure
             response.sendStatus(401);
         }
-    }
-    else {
+    } else {
         // Bad Request
         response.sendStatus(400);
     }
