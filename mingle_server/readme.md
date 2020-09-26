@@ -34,13 +34,21 @@ will be set to the default if it is not included in the configuration file. A fu
 is given below the parameter table.
 
 | Parameter Name | Type | Default | Description |
-| :------------- | :--- | :------- | :---------- |
-| port           | Int  | 4000 | The port you want the server to listen on. |
+| :------------- | :------ | :---- | :---------- |
+| server.port    | Int     | 4000  | The port you want the server to listen on. |
+| log.level      | String  | debug | The log level you want to display. |
+| log.file       | Path    |  | The path to the log file you want to output. |
 
 #### Example Configuration File
 
 ```
 {
-    "port": 3000
+    "server": {
+        "port": 4000
+    },
+    "log": {
+        "level": "debug",
+        "file", "/path/to/test.log"
+    }
 }
 ```
