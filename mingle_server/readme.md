@@ -34,10 +34,15 @@ will be set to the default if it is not included in the configuration file. A fu
 is given below the parameter table.
 
 | Parameter Name | Type | Default | Description |
-| :------------- | :------ | :---- | :---------- |
-| server.port    | Int     | 4000  | The port you want the server to listen on. |
-| log.level      | String  | debug | The log level you want to display. |
-| log.file       | Path    |  | The path to the log file you want to output. |
+| :----------------- | :------ | :---- | :---------- |
+| server.port        | Int     | 4000  | The port you want the server to listen on. |
+| log.level          | String  | debug | The log level you want to display. |
+| log.file           | Path    |       | The path to the log file you want to output. |
+| database.host      | String  |       | Hostname of the server the database runs on. |
+| database.port      | Int     |       | The port you want the server to listen on. |
+| database.user      | String  |       | Username on the database you are accessing. |
+| database.password  | String  |       | Password on the database for the user you are accessing. |
+| database.database  | String  |       | Name of the database. |
 
 #### Example Configuration File
 
@@ -49,6 +54,13 @@ is given below the parameter table.
     "log": {
         "level": "debug",
         "file", "/path/to/test.log"
+    },
+    "database": {
+        "host": "hostnameofdatabaseserver",
+        "port": 8000,
+        "user": "username",
+        "password": "password",
+        "database": "Mingle"
     }
 }
 ```

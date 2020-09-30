@@ -8,6 +8,8 @@ const customFormat = printf(({level, message, timestamp, ...metadata}) => {
     return msg
 });
 
+let test = 1;
+
 module.exports = {
     createLogger: (configuration) => {
         let transports = [];

@@ -1,41 +1,31 @@
 let express = require('express');
 let bodyparser = require('body-parser');
-
+let configuration = require('./configuration')
 let log = require('./log');
 let database = require('./database');
 
-let configuration;
-try {
-    // JSON file containing configuration parameters that could differ by environment
-    configuration = require('../config.json');
-} catch (exception) {
-    console.log("Failed to find a configuration file, see readme for details in creating a config file.");
-    process.exit();
-}
-
-// If no port specified in configuration file, set to default.
-configuration.server.port = configuration.server.port || 4000;
-configuration.server.logLevel = configuration.log.logLevel || 'debug';
-
-log.createLogger(configuration.log);
 let logger = log.getLogger();
 
-// TODO: Pass database configuration details in here once they are added to the configuration file.
-database.connectToDatabase();
+database.connectToDatabase(configuration.database).then(() => {
+    logger.debug(`Connection pool created`);
+}).catch((exception) => {
+    logger.error(`Failed to create connection pool`);
+    logger.error(exception);
+});
 
 let app = express();
 
 app.use(bodyparser.urlencoded({extended: false}));
 
-app.post('/register', (request, response) => {
-    logger.debug(`Username: ${request.body.username}`);
-    logger.debug(`Password: ${request.body.password}`);
-    logger.debug(`Email: ${request.body.email}`);
+// Endpoints
+
+app.post('/register', async (request, response) => {
+    logger.debug(`Request Body: ${JSON.stringify(request.body)}`);
 
     // Check that all required fields are present
     if (request.body.username && request.body.password && request.body.email) {
 
-        if (database.registerUser(request.body.username, request.body.password, request.body.email)) {
+        if (await database.registerUser(request.body.username, request.body.password, request.body.email)) {
             // Registration success
             response.sendStatus(200);
         } else {
@@ -46,23 +36,20 @@ app.post('/register', (request, response) => {
         // Bad request
         response.sendStatus(400);
     }
-
-    response.sendStatus(200);
 });
 
 // Login endpoint, takes a url encoded 'username' and 'password'
-app.post('/login', (request, response) => {
-    logger.debug(`Username: ${request.body.username}`);
-    logger.debug(`Password: ${request.body.password}`);
+app.post('/login', async (request, response) => {
+    logger.debug(`Request Body: ${JSON.stringify(request.body)}`);
 
     // Check that all required fields are present
     if (request.body.username && request.body.password) {
 
-        if (database.verifyUser(request.body.username, request.body.password)) {
+        if (await database.verifyUser(request.body.username, request.body.password)) {
             // Login success
             response.sendStatus(200);
         } else {
-            // Login failure
+            // Unauthorized
             response.sendStatus(401);
         }
     } else {
