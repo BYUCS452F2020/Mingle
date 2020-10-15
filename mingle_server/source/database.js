@@ -38,6 +38,46 @@ let verifyUser = async (username, password) => {
     }
 }
 
+let setUserLocation = async (username, latitude, longitude) => {
+    try {
+        await connectionPool.query('UPDATE Users SET latitude = ?, longitude = ? WHERE username = ?', [latitude, longitude, username]);
+    } catch (exception) {
+        logger.error(exception);
+        return false;
+    }
+    return true;
+}
+
+let saveProfileInformation = async (username, firstName, homeTown, age, state, country, aboutMe, verified) => {
+    try {
+        let query = 'UPDATE Friends ' +
+            'SET ' +
+            'first_name = ?, ' +
+            'hometown = ?, ' +
+            'age = ?, ' +
+            'state = ?, ' +
+            'country = ?, ' +
+            'about_me = ?, ' +
+            'verified_profile = ? ' +
+            'WHERE username = ?';
+        let parameters = [
+            firstName,
+            homeTown,
+            age,
+            state,
+            country,
+            aboutMe,
+            verified,
+            username
+        ]
+        await connectionPool.query(query, parameters);
+    } catch (exception) {
+        logger.error(exception);
+        return false;
+    }
+    return true;
+}
+
 let saveProfilePictureName = async (username, image) => {
     try {
         await connectionPool.query('UPDATE Friends SET Profile_Picture = ? WHERE username = ?', [image, username]);
@@ -69,6 +109,8 @@ module.exports = {
     connectToDatabase: connectToDatabase,
     verifyUser: verifyUser,
     registerUser: registerUser,
+    setUserLocation: setUserLocation,
+    saveProfileInformation: saveProfileInformation,
     saveProfilePictureName: saveProfilePictureName,
     getProfilePictureName: getProfilePictureName
 }

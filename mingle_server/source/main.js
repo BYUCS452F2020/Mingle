@@ -72,6 +72,50 @@ app.post('/login', async (request, response) => {
     }
 });
 
+app.post('/profile', async (request, response) => {
+    if (request.body.username &&
+        request.body.firstName &&
+        request.body.homeTown &&
+        request.body.age &&
+        request.body.state &&
+        request.body.country &&
+        request.body.aboutMe &&
+        request.body.verified) {
+        if (await database.saveProfileInformation(
+            request.body.username,
+            request.body.firstName,
+            request.body.homeTown,
+            request.body.age,
+            request.body.state,
+            request.body.country,
+            request.body.aboutMe,
+            request.body.verified === "true" || request.body === "True")) {
+            // Successfully saved profile information
+            response.sendStatus(200);
+        } else {
+            // Bad request, can't think of a better way to categorize this failure at the moment
+            response.sendStatus(400);
+        }
+    } else {
+        // Bad Request
+        response.sendStatus(400);
+    }
+});
+
+app.post('/profile/location', async (request, response) => {
+    if (request.body.username && request.body.latitude && request.body.longitude) {
+        if (await database.setUserLocation(request.body.username, request.body.latitude, request.body.longitude)) {
+            response.sendStatus(200);
+        } else {
+            // Bad request, can't think of a better way to categorize this failure at the moment
+            response.sendStatus(400);
+        }
+    } else {
+        // Bad Request
+        response.sendStatus(400);
+    }
+})
+
 // Upload profile picture
 app.post('/profile/picture', upload.single('profilePicture'), async (request, response) => {
     if (request.body.username && request.file) {
@@ -83,7 +127,7 @@ app.post('/profile/picture', upload.single('profilePicture'), async (request, re
         // Bad Request
         response.sendStatus(400);
     }
-})
+});
 
 app.get('/profile/picture/:username', async (request, response) => {
     let imageName = await database.getProfilePictureName(request.params.username);
@@ -98,7 +142,7 @@ app.get('/profile/picture/:username', async (request, response) => {
     } else {
         response.sendStatus(404);
     }
-})
+});
 
 logger.info(`Listening on port ${configuration.server.port}`);
 app.listen(configuration.server.port);
