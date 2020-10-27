@@ -129,6 +129,18 @@ let getProfileInformation = async (username) => {
     }
 }
 
+let getFriendsOfUser = async (username) => {
+    try {
+        let query = 'SELECT Friends.* FROM Friends JOIN Matching_Friends ON Friends.username = Matching_Friends.username WHERE matching_username = ? ' +
+            'UNION SELECT Friends.* FROM Friends JOIN Matching_Friends ON Friends.username = Matching_Friends.matching_username WHERE Matching_Friends.username = ? ';
+        let result = await connectionPool.query(query, [username, username]);
+        return result[0];
+    } catch (exception) {
+        logger.error(exception);
+        return [];
+    }
+}
+
 
 module.exports = {
     connectToDatabase: connectToDatabase,
@@ -140,4 +152,5 @@ module.exports = {
     saveProfilePictureName: saveProfilePictureName,
     getProfilePictureName: getProfilePictureName,
     getProfileInformation: getProfileInformation,
+    getFriendsOfUser: getFriendsOfUser,
 }

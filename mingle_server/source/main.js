@@ -164,5 +164,10 @@ app.get('/profile/:username', async (request, response) => {
     }
 });
 
+app.get('/profile/:username/friends', async (request, response) => {
+    let friends = await database.getFriendsOfUser(request.params.username);
+    response.send(friends);
+})
+
 logger.info(`Listening on port ${configuration.server.port}`);
 app.listen(configuration.server.port);
