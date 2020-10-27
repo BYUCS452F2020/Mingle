@@ -78,6 +78,16 @@ let saveProfileInformation = async (username, firstName, homeTown, age, state, c
     return true;
 }
 
+let setMatchedFriends = async (username, otherUsername) => {
+    try {
+        await connectionPool.query('INSERT INTO Matching_Friends (username, matching_username) VALUES (?, ?)', [username, otherUsername]);
+    } catch (exception) {
+        logger.error(exception);
+        return false;
+    }
+    return true;
+}
+
 let saveProfilePictureName = async (username, image) => {
     try {
         await connectionPool.query('UPDATE Friends SET Profile_Picture = ? WHERE username = ?', [image, username]);
@@ -104,13 +114,30 @@ let getProfilePictureName = async (username) => {
     }
 }
 
+let getProfileInformation = async (username) => {
+    try {
+        let result = await connectionPool.query('SELECT * FROM Friends WHERE username = ?', [username]);
+        let returnedRows = result[0];
+        if (returnedRows.length > 0) {
+            return returnedRows[0];
+        } else {
+            return ""
+        }
+    } catch (exception) {
+        logger.error(exception);
+        return "";
+    }
+}
+
 
 module.exports = {
     connectToDatabase: connectToDatabase,
     verifyUser: verifyUser,
     registerUser: registerUser,
     setUserLocation: setUserLocation,
+    setMatchedFriends: setMatchedFriends,
     saveProfileInformation: saveProfileInformation,
     saveProfilePictureName: saveProfilePictureName,
-    getProfilePictureName: getProfilePictureName
+    getProfilePictureName: getProfilePictureName,
+    getProfileInformation: getProfileInformation,
 }

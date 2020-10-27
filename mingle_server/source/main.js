@@ -54,8 +54,6 @@ app.post('/register', async (request, response) => {
 
 // Login endpoint, takes a url encoded 'username' and 'password'
 app.post('/login', async (request, response) => {
-    logger.info(`Request Body: ${JSON.stringify(request.body)}`);
-
     // Check that all required fields are present
     if (request.body.username && request.body.password) {
 
@@ -116,10 +114,23 @@ app.post('/profile/location', async (request, response) => {
     }
 })
 
+app.post('/profile/friend', async (request, response) => {
+    if (request.body.username && request.body.otherUsername) {
+        if (await database.setMatchedFriends(request.body.username, request.body.otherUsername)) {
+            response.sendStatus(200);
+        } else {
+            // Conflict
+            response.sendStatus(409);
+        }
+    } else {
+        // Bad Request
+        response.sendStatus(400);
+    }
+})
+
 // Upload profile picture
 app.post('/profile/picture', upload.single('profilePicture'), async (request, response) => {
     if (request.body.username && request.file) {
-        logger.info(`Received profile picture for user: ${request.body.username}`);
         await database.saveProfilePictureName(request.body.username, request.file.originalname);
         // Successfully loaded profile picture
         response.sendStatus(200);
@@ -139,6 +150,15 @@ app.get('/profile/picture/:username', async (request, response) => {
         } else {
             response.sendStatus(404);
         }
+    } else {
+        response.sendStatus(404);
+    }
+});
+
+app.get('/profile/:username', async (request, response) => {
+    let profile = await database.getProfileInformation(request.params.username);
+    if (profile) {
+        response.send(profile);
     } else {
         response.sendStatus(404);
     }
