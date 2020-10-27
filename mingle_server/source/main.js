@@ -169,5 +169,12 @@ app.get('/profile/:username/friends', async (request, response) => {
     response.send(friends);
 })
 
+app.get('/profile/:username/friends/potential', async (request, response) => {
+    // In theory there would be some algorithm here to get potential friends based on some criteria, right now this just
+    // returns a list of all profiles that the user has not matched with.
+    let friends = await database.getAllUnmatchedProfilesForUser(request.params.username);
+    response.send(friends);
+})
+
 logger.info(`Listening on port ${configuration.server.port}`);
 app.listen(configuration.server.port);

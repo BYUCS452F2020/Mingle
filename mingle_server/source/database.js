@@ -141,6 +141,18 @@ let getFriendsOfUser = async (username) => {
     }
 }
 
+let getAllUnmatchedProfilesForUser = async (username) => {
+    try {
+        let query = 'SELECT Friends.* FROM Friends WHERE username != ? AND username NOT IN ' +
+            '(SELECT matching_username FROM Matching_Friends WHERE username = ? ' +
+            'UNION SELECT username FROM Matching_Friends WHERE matching_username = ?)';
+        let result = await connectionPool.query(query, [username, username, username]);
+        return result[0];
+    } catch (exception) {
+        logger.error(exception);
+        return [];
+    }
+}
 
 module.exports = {
     connectToDatabase: connectToDatabase,
@@ -153,4 +165,5 @@ module.exports = {
     getProfilePictureName: getProfilePictureName,
     getProfileInformation: getProfileInformation,
     getFriendsOfUser: getFriendsOfUser,
+    getAllUnmatchedProfilesForUser: getAllUnmatchedProfilesForUser,
 }
