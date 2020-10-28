@@ -154,6 +154,61 @@ let getAllUnmatchedProfilesForUser = async (username) => {
     }
 }
 
+let createEvent = async (eventId, username, location, latitude, longitude, dateTime, eventDescription, otherInformation, verified) => {
+    try {
+        let query = 'INSERT INTO Events (event_id, username, location, latitude, longitude, date_time, event_description, other_information, verified_event) VALUES' +
+            '(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        let parameters = [
+            eventId,
+            username,
+            location,
+            latitude,
+            longitude,
+            new Date(dateTime).toISOString().slice(0, 19).replace('T', ' '),
+            eventDescription,
+            otherInformation,
+            verified
+        ];
+        await connectionPool.query(query, parameters);
+    } catch (exception) {
+        logger.error(exception);
+        return false;
+    }
+    return true;
+}
+
+let getEventsOfUser = async (username) => {
+    try {
+        let query = 'SELECT Events.* FROM Events WHERE Events.username = ? OR Events.event_id IN (SELECT Matching_Events.event_id FROM Matching_Events WHERE Matching_Events.username = ?)';
+        let result = await connectionPool.query(query, [username, username]);
+        return result[0];
+    } catch (exception) {
+        logger.error(exception);
+        return [];
+    }
+}
+
+let getAllUnmatchedEventsForUser = async (username) => {
+    try {
+        let query = 'SELECT Events.* FROM Events WHERE Events.username != ? AND Events.event_id IN (SELECT Matching_Events.event_id FROM Matching_Events WHERE Matching_Events.username != ?)';
+        let result = await connectionPool.query(query, [username, username]);
+        return result[0];
+    } catch (exception) {
+        logger.error(exception);
+        return [];
+    }
+}
+
+let setMatchedEvent = async (username, eventId) => {
+    try {
+        await connectionPool.query('INSERT INTO Matching_Events (username, event_id) VALUES (?, ?)', [username, eventId]);
+    } catch (exception) {
+        logger.error(exception);
+        return false;
+    }
+    return true;
+}
+
 module.exports = {
     connectToDatabase: connectToDatabase,
     verifyUser: verifyUser,
@@ -166,4 +221,8 @@ module.exports = {
     getProfileInformation: getProfileInformation,
     getFriendsOfUser: getFriendsOfUser,
     getAllUnmatchedProfilesForUser: getAllUnmatchedProfilesForUser,
+    createEvent: createEvent,
+    getEventsOfUser: getEventsOfUser,
+    getAllUnmatchedEventsForUser: getAllUnmatchedEventsForUser,
+    setMatchedEvent, setMatchedEvent,
 }

@@ -87,7 +87,7 @@ app.post('/profile', async (request, response) => {
             request.body.state,
             request.body.country,
             request.body.aboutMe,
-            request.body.verified === "true" || request.body === "True")) {
+            request.body.verified === "true" || request.body.verified === "True")) {
             // Successfully saved profile information
             response.sendStatus(200);
         } else {
@@ -167,13 +167,71 @@ app.get('/profile/:username', async (request, response) => {
 app.get('/profile/:username/friends', async (request, response) => {
     let friends = await database.getFriendsOfUser(request.params.username);
     response.send(friends);
-})
+});
 
 app.get('/profile/:username/friends/potential', async (request, response) => {
     // In theory there would be some algorithm here to get potential friends based on some criteria, right now this just
     // returns a list of all profiles that the user has not matched with.
     let friends = await database.getAllUnmatchedProfilesForUser(request.params.username);
     response.send(friends);
+});
+
+app.post('/event', async (request, response) => {
+    if (request.body.eventId &&
+        request.body.username &&
+        request.body.location &&
+        request.body.latitude &&
+        request.body.longitude &&
+        request.body.dateTime &&
+        request.body.eventDescription &&
+        request.body.otherInformation &&
+        request.body.verified) {
+        if (await database.createEvent(
+            request.body.eventId,
+            request.body.username,
+            request.body.location,
+            request.body.latitude,
+            request.body.longitude,
+            request.body.dateTime,
+            request.body.eventDescription,
+            request.body.otherInformation,
+            request.body.verified === "true" || request.body.verified === "True")) {
+            // Successfully saved event information
+            response.sendStatus(200);
+        } else {
+            // Bad request, can't think of a better way to categorize this failure at the moment
+            response.sendStatus(400);
+        }
+    } else {
+        // Bad Request
+        response.sendStatus(400);
+    }
+});
+
+app.get('/profile/:username/events', async (request, response) => {
+    let events = await database.getEventsOfUser(request.params.username);
+    response.send(events);
+});
+
+app.get('/profile/:username/events/potential', async (request, response) => {
+    // In theory there would be some algorithm here to get potential friends based on some criteria, right now this just
+    // returns a list of all profiles that the user has not matched with.
+    let events = await database.getAllUnmatchedEventsForUser(request.params.username);
+    response.send(events);
+});
+
+app.post('/profile/event', async (request, response) => {
+    if (request.body.username && request.body.eventId) {
+        if (await database.setMatchedEvent(request.body.username, request.body.eventId)) {
+            response.sendStatus(200);
+        } else {
+            // Conflict
+            response.sendStatus(409);
+        }
+    } else {
+        // Bad Request
+        response.sendStatus(400);
+    }
 })
 
 logger.info(`Listening on port ${configuration.server.port}`);
