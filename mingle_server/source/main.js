@@ -143,8 +143,9 @@ app.post('/profile/picture', upload.single('profilePicture'), async (request, re
 app.get('/profile/picture/:username', async (request, response) => {
     let imageName = await database.getProfilePictureName(request.params.username);
     if (imageName) {
-        let imagePath = path.join(__dirname, '..', configuration.storage.imageStoragePath, imageName);
-        logger.debug(imagePath);
+        //let imagePath = path.join(__dirname, '..', configuration.storage.imageStoragePath, imageName);
+        let imagePath = path.join(configuration.storage.imageStoragePath, imageName);
+        logger.debug(path.join(configuration.storage.imageStoragePath, imageName));
         if (filesystem.existsSync(imagePath)) {
             response.sendFile(imagePath);
         } else {
