@@ -140,10 +140,36 @@ app.post('/profile/picture', upload.single('profilePicture'), async (request, re
     }
 });
 
+// Upload profile picture
+app.post('/event/picture', upload.single('eventPicture'), async (request, response) => {
+    if (request.body.eventId && request.file) {
+        await database.saveEventImageName(request.body.username, request.file.originalname);
+        // Successfully loaded event picture
+        response.sendStatus(200);
+    } else {
+        // Bad Request
+        response.sendStatus(400);
+    }
+});
+
 app.get('/profile/picture/:username', async (request, response) => {
     let imageName = await database.getProfilePictureName(request.params.username);
     if (imageName) {
-        //let imagePath = path.join(__dirname, '..', configuration.storage.imageStoragePath, imageName);
+        let imagePath = path.join(configuration.storage.imageStoragePath, imageName);
+        logger.debug(path.join(configuration.storage.imageStoragePath, imageName));
+        if (filesystem.existsSync(imagePath)) {
+            response.sendFile(imagePath);
+        } else {
+            response.sendStatus(404);
+        }
+    } else {
+        response.sendStatus(404);
+    }
+});
+
+app.get('/event/picture/:eventId', async (request, response) => {
+    let imageName = await database.getEventImageName(request.params.eventId);
+    if (imageName) {
         let imagePath = path.join(configuration.storage.imageStoragePath, imageName);
         logger.debug(path.join(configuration.storage.imageStoragePath, imageName));
         if (filesystem.existsSync(imagePath)) {

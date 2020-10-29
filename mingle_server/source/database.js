@@ -91,7 +91,16 @@ let setMatchedFriends = async (username, otherUsername) => {
 let saveProfilePictureName = async (username, image) => {
     try {
         await connectionPool.query('UPDATE Friends SET Profile_Picture = ? WHERE username = ?', [image, username]);
-        logger.info(`Added user ${username} to database`);
+    } catch (exception) {
+        logger.error(exception);
+        return false;
+    }
+    return true;
+}
+
+let saveEventImageName = async (eventId, image) => {
+    try {
+        await connectionPool.query('UPDATE Events SET image = ? WHERE event_id = ?', [image, eventId]);
     } catch (exception) {
         logger.error(exception);
         return false;
@@ -105,6 +114,21 @@ let getProfilePictureName = async (username) => {
         let returnedRows = result[0];
         if (returnedRows.length > 0) {
             return returnedRows[0].profile_picture;
+        } else {
+            return "";
+        }
+    } catch (exception) {
+        logger.error(exception);
+        return "";
+    }
+}
+
+let getEventImageName = async (eventId) => {
+    try {
+        let result = await connectionPool.query('SELECT image FROM Events WHERE event_id = ?', [eventId]);
+        let returnedRows = result[0];
+        if (returnedRows.length > 0) {
+            return returnedRows[0].image;
         } else {
             return "";
         }
@@ -190,7 +214,7 @@ let getEventsOfUser = async (username) => {
 
 let getAllUnmatchedEventsForUser = async (username) => {
     try {
-        let query = 'SELECT Events.* FROM Events WHERE Events.username != ? AND Events.event_id IN (SELECT Matching_Events.event_id FROM Matching_Events WHERE Matching_Events.username != ?)';
+        let query = 'SELECT Events.* FROM Events WHERE Events.username != ? AND Events.event_id NOT IN (SELECT Matching_Events.event_id FROM Matching_Events WHERE Matching_Events.username = ?)';
         let result = await connectionPool.query(query, [username, username]);
         return result[0];
     } catch (exception) {
@@ -217,12 +241,14 @@ module.exports = {
     setMatchedFriends: setMatchedFriends,
     saveProfileInformation: saveProfileInformation,
     saveProfilePictureName: saveProfilePictureName,
+    saveEventImageName: saveEventImageName,
     getProfilePictureName: getProfilePictureName,
+    getEventImageName: getEventImageName,
     getProfileInformation: getProfileInformation,
     getFriendsOfUser: getFriendsOfUser,
     getAllUnmatchedProfilesForUser: getAllUnmatchedProfilesForUser,
     createEvent: createEvent,
     getEventsOfUser: getEventsOfUser,
     getAllUnmatchedEventsForUser: getAllUnmatchedEventsForUser,
-    setMatchedEvent, setMatchedEvent,
+    setMatchedEvent: setMatchedEvent,
 }
