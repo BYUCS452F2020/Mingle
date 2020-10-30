@@ -143,7 +143,7 @@ app.post('/profile/picture', upload.single('profilePicture'), async (request, re
 // Upload profile picture
 app.post('/event/picture', upload.single('eventPicture'), async (request, response) => {
     if (request.body.eventId && request.file) {
-        await database.saveEventImageName(request.body.username, request.file.originalname);
+        await database.saveEventImageName(request.body.eventId, request.file.originalname);
         // Successfully loaded event picture
         response.sendStatus(200);
     } else {
