@@ -207,9 +207,17 @@ let getProfileInformation = async (username) => {
         {
             return "";
         }
-        delete result[0].friends;
-        delete result[0].events;
-        return result[0];
+        let profile = result[0];
+        return {
+            username: profile.username,
+            firstName: profile.firstName,
+            homeTown: profile.homeTown,
+            age: profile.age,
+            state: profile.state,
+            country: profile.country,
+            aboutMe: profile.aboutMe,
+            verified: profile.verified,
+        };
     } catch (exception) {
         logger.error(exception);
         return "";
@@ -228,9 +236,16 @@ let getFriendsOfUser = async (username) => {
             if (profile.username == username) continue;
             if (result.friends.includes(profile.username))
             {
-                delete profile.friends;
-                delete profile.events;
-                friends.push(profile);
+                friends.push({
+                    username: profile.username,
+                    firstName: profile.firstName,
+                    homeTown: profile.homeTown,
+                    age: profile.age,
+                    state: profile.state,
+                    country: profile.country,
+                    aboutMe: profile.aboutMe,
+                    verified: profile.verified,
+                });
             }
         }
         return friends;
@@ -249,9 +264,16 @@ let getAllUnmatchedProfilesForUser = async (username) => {
             if (profile.username === username) continue;
             if (!profile.friends.includes(username))
             {
-                delete profile.friends;
-                delete profile.events;
-                unmatched.push(profile);
+                unmatched.push({
+                    username: profile.username,
+                    firstName: profile.firstName,
+                    homeTown: profile.homeTown,
+                    age: profile.age,
+                    state: profile.state,
+                    country: profile.country,
+                    aboutMe: profile.aboutMe,
+                    verified: profile.verified,
+                });
             }
         }
         return unmatched;
