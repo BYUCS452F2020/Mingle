@@ -5,7 +5,7 @@ let filesystem = require('fs');
 let path = require('path');
 let configuration = require('./configuration')
 let log = require('./log');
-let database = require('./database');
+let database = require('./mongodatabase');
 
 let storage = multer.diskStorage({
     destination: function (request, file, callback) {
@@ -21,7 +21,7 @@ let upload = multer({storage: storage});
 let logger = log.getLogger();
 
 database.connectToDatabase(configuration.database).then(() => {
-    logger.debug(`Connection pool created`);
+    logger.debug(`Connected to database`);
 }).catch((exception) => {
     logger.error(`Failed to create connection pool`);
     logger.error(exception);
@@ -130,6 +130,7 @@ app.post('/profile/friend', async (request, response) => {
 
 // Upload profile picture
 app.post('/profile/picture', upload.single('profilePicture'), async (request, response) => {
+    console.log('/profile/picture');
     if (request.body.username && request.file) {
         await database.saveProfilePictureName(request.body.username, request.file.originalname);
         // Successfully loaded profile picture
