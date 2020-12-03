@@ -180,7 +180,7 @@ let getProfilePictureName = async (username) => {
         {
             return "";
         }
-        return result;
+        return result[0].profilePicture;
     } catch (exception) {
         logger.error(exception);
         return "";
