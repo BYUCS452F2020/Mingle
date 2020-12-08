@@ -194,6 +194,7 @@ let getEventImageName = async (eventId) => {
         {
             return "";
         }
+        return result[0].image;
     } catch (exception) {
         logger.error(exception);
         return "";
